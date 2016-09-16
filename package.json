@@ -1,0 +1,23 @@
+{
+  "name": "jumbooks",
+  "version": "1.0.0",
+  "description": "Marketplace for textbooks",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+  	"ejs": "latest",
+  	"express": "latest",
+  	"body-parser": "latest",
+  	"validator":"latest",
+  	"mongodb": "latest",
+  	"validator": "latest"
+  },
+  "repository": {
+  	"type": "git",
+  	"url": "https://github.com/heroku/jumbooks"
+  },
+  "author": "Marcus Mok",
+  "license": "ISC"
+}
