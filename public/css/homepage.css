@@ -1,0 +1,12 @@
+.box {
+	height: 100%;
+	text-align: center;
+}
+
+#buy-box {
+	background-color: red;
+}
+
+#sell-box {
+	background-color: blue;
+}
