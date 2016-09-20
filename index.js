@@ -6,14 +6,14 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-var bootstrap = require('bootstrap');
-
 //MONGO URI mongodb://heroku_cg298mb6:33hagtgt4p1bimt1ruiht6vt6j@ds029106.mlab.com:29106/heroku_cg298mb6
 var mongoUri = process.env.MONGOLABURI || process.env.MONGOHQ_URL || 'mongodb://heroku_cg298mb6:33hagtgt4p1bimt1ruiht6vt6j@ds029106.mlab.com:29106/heroku_cg298mb6';
 var MongoClient = require('mongodb').MongoClient, format = require('util').format;
 var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
     db = databaseConnection;
 });
+
+app.use(express.static(__dirname + '/public'));
 
 app.post('/add', function(request, response) {
 
