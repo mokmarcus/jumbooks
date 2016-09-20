@@ -16,6 +16,7 @@ var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
 });
 
 app.post('/add', function(request, response) {
+
     var book_info = {
         "book_name": request.body.book_name,
         "book_author": request.body.book_author,
@@ -41,17 +42,29 @@ app.post('/add', function(request, response) {
 });
 
 app.get('/search', function(request, response) {
+
+    // All search fields and values
+    var search_by = request.query;
+
+    // Array of search fields
+    var search_fields = Object.keys(search_by);
+
+    // Loop by search fields, update search values to regex object
+    for (var i = 0; i < search_fields.length; i++) {
+        var search_value = search_by[search_fields[i]];
+        var new_object = { $regex : new RegExp(search_value, 'i')};
+
+        search_by[search_fields[i]] = new_object;
+    }
+
+    db.collection("books").find(search_by).toArray(function(error, cursor) {
+        if (error) {
+            // response.send("Oh no, something went wrong!");
+            response.sendStatus(500);
+        } else {
+            response.send(JSON.stringify(cursor));
+        }
+    });
 });
 
-// app.get('/search', function(request, response) {
-
-// })
-
-// views is directory for all template files
-
-// app.get('/', function(request, response) {
-//   	response.render('index.html');
-// });
-
 app.listen(process.env.PORT || 8000);
-console.log("after listen");
