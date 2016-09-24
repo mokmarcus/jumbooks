@@ -5,24 +5,34 @@
 	<title>Jumbooks</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
 	<script type="text/javascript" src="js/homepage.js"></script>
 	<link rel="stylesheet" href="css/homepage.css"/>
 </head>
 
-<body>
-	<div class="container-fluid">
+<body ng-app="jumbooks_app">
+	<div class="container-fluid" ng-controller="jumbooks_ctrl">
 		<div class="row">
-			<div class="box col-md-6" id="buy-box">
-				<h1 class="title">BUY</h1>
+			<div id="sitemap">
+				<div id="logo" ng-click="home()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">jumbooks</div>
+				<div class="sitemap-option" ng-click="about()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">about</div>
+				<div class="sitemap-option" ng-click="contact()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">contact</div>
 			</div>
-			<div class="box col-md-6" id="sell-box">
-				<h1 class="title">SELL</h1>
+			<span class="glyphicon glyphicon glyphicon-menu-left emerge" id="back-arrow" aria-hidden="true" ng-click="back()" ng-show="buy_clicked || sell_clicked" ng-class="{'buy-color': buy_clicked, 'sell-color': sell_clicked}"></span>
+			<div class="box col-md-6 buy-background buy-color" ng-model="buy_clicked" ng-hide="sell_clicked" ng-class="{'this-box-clicked': buy_clicked, 'other-box-clicked': sell_clicked}">
+				<p class="title" ng-click="clickedBuy()">buy.</p>
+			</div>
+			<div id="marketplace" class="col-md-6 col-md-offset-3 emerge" ng-show="buy_clicked">
+				<input id="search-box" type="text" placeholder="Start typing a the name of a textbook, class, professor..." ng-model="searchText">
+			</div>
+			<div class="box col-md-6 sell-background sell-color" ng-model="sell_clicked" ng-hide="buy_clicked" ng-class="{'this-box-clicked': sell_clicked, 'other-box-clicked': buy_clicked}">
+				<p class="title" ng-click="clickedSell()">sell.</p>
 			</div>
 		</div>
 	</div>
 </body>
-
 </html>
