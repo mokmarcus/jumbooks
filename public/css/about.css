@@ -1,0 +1,18 @@
+.about_main {
+	margin: 5%;
+}
+
+.about_person {
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.circle_image {
+	height: 120px;
+	width: 120px;
+	border-radius: 150px;
+}
+
+.about_info {
+	text-align: left;
+}
