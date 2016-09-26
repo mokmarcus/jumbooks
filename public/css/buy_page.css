@@ -1,0 +1,24 @@
+#buy-search-container {
+	position: absolute;
+	z-index: 100;
+	top: 17vh;
+}
+
+.buy-search-result {
+	background-color: #f1f1f1;
+	margin-top: 15px;
+	padding: 8px;
+	border-radius: 4px;
+}
+
+.buy-result-default {
+	cursor: pointer;
+}
+
+.buy-result-expanded {
+	padding-top: 10px;
+}
+
+.buy-action-btn {
+	margin-top: 10px;
+}

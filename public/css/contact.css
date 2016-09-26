@@ -4,9 +4,10 @@ body {
 
 .form {
 	margin: 60px auto;
-	background-color: lightblue;
+	background-color: orange;
 	width: 45%;
 	padding: 20px 0 20px 0;
+	border-radius: 6px;
 }
 
 .message-block {

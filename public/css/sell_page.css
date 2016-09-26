@@ -1,0 +1,72 @@
+#sell-mode-options {
+	position: absolute;
+	z-index: 100;
+	top: 17vh;
+}
+
+.sell-mode-btn {
+	font-size: 15px;
+	border-style: solid;
+	border-width: 2px;
+	padding: 5px;
+	display: inline;
+	cursor: pointer;
+	text-align: center;
+}
+
+.sell-btn-default {
+	color: orange;
+	background-color: white;
+	border-color: orange;
+}
+
+.sell-btn-selected {
+	color: white;
+	background-color: orange;
+	border-color: orange;
+}
+
+#input-form {
+	position: absolute;
+	z-index: 100;
+	top: 23vh;
+}
+
+.input-label {
+	margin-top: 5px;
+}
+
+#sell-submit-btn {
+	margin-top: 20px;
+}
+
+#sell-submit-btn:active {
+	color: white;
+	background-color: orange;
+	border-color: orange;
+}
+
+#sell-search-container {
+	position: absolute;
+	z-index: 100;
+	top: 24vh;
+}
+
+.sell-search-result {
+	background-color: #f1f1f1;
+	margin-top: 15px;
+	padding: 8px;
+	border-radius: 4px;
+}
+
+.sell-result-default {
+	cursor: pointer;
+}
+
+.sell-result-expanded {
+	padding-top: 10px;
+}
+
+.sell-action-btn {
+	margin-top: 10px;
+}

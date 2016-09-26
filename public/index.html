@@ -10,29 +10,193 @@
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
-	<script type="text/javascript" src="js/homepage.js"></script>
-	<link rel="stylesheet" href="css/homepage.css"/>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-touch.js"></script>
+	<script type="text/javascript" src="js/ui-bootstrap-tpls-2.1.4.min.js"></script>
+	<script src="http://connect.facebook.net/en_US/sdk.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
+	<link rel="stylesheet" href="css/all.css"/>
+	<link rel="stylesheet" href="css/index.css"/>
+	<link rel="stylesheet" href="css/buy_page.css"/>
+	<link rel="stylesheet" href="css/sell_page.css"/>
+	<link rel="stylesheet" href="css/sitemap.css"/>
 </head>
 
-<body ng-app="jumbooks_app">
-	<div class="container-fluid" ng-controller="jumbooks_ctrl">
+<body ng-app="jumbooks_mod" ng-controller="jumbooks_ctrl">
+	<div class="container-fluid">
 		<div class="row">
-			<div id="sitemap">
+
+			<!-- Back Button -->
+			<span class="glyphicon glyphicon glyphicon-menu-left emerge" id="back-arrow" aria-hidden="true" ng-click="back()" ng-show="buy_clicked || sell_clicked" ng-class="{'buy-color': buy_clicked, 'sell-color': sell_clicked}"></span>
+
+			<!-- Buy Page -->
+			<div class="box col-xs-6 buy-background buy-color" ng-model="buy_clicked" ng-hide="sell_clicked" ng-class="{'this-box-clicked': buy_clicked, 'other-box-clicked': sell_clicked}">
+				<div class="title" ng-click="selected_buy()">buy.</div>
+			</div>
+
+			<div id="buy-search-container" class="col-xs-6 col-xs-offset-3 emerge" ng-show="buy_clicked">
+				<input id="buy-search-box" class="form-control" type="search" placeholder="Start typing a the name of a textbook, class, professor..." ng-model="searchText">
+
+				<!-- Book Results Template -->
+				<div id="buy-search-results">
+					<div class="buy-search-result" ng-model="buy_result_expanded">
+						<div class="buy-result-default row" ng-click="buy_toggle_expansion()">
+							<div class="col-xs-7">Calculus, Early Transcendentals</div>
+							<div class="col-xs-4">William Briggs, Lyle Cochran</div>
+							<span class="col-xs-1 glyphicon glyphicon-menu-down" aria-hidden="true" ng-hide="buy_result_expanded"></span>
+							<span class="col-xs-1 glyphicon glyphicon-menu-up" aria-hidden="true" ng-show="buy_result_expanded"></span>
+						</div>
+						<div class="buy-result-expanded row slide" ng-show="buy_result_expanded">
+							<div class="col-xs-12 row">
+								<div class="col-xs-2">Seller:</div>
+								<div class="col-xs-5">Marcus Mok</div>
+								<div class="col-xs-2">Date:</div>
+								<div class="col-xs-3">09/26/2016</div>
+							</div>
+							<div class="col-xs-12 row">
+								<div class="col-xs-2">Class:</div>
+								<div class="col-xs-10">Calculus II</div>
+							</div>
+							<div class="col-xs-12 row">
+								<div class="col-xs-2">Professor:</div>
+								<div class="col-xs-5">Mary Glaser</div>
+								<div class="col-xs-2">Number:</div>
+								<div class="col-xs-3">MATH-34</div>
+							</div>
+							<div class="col-xs-12 row">
+								<div class="col-xs-2">Edition:</div>
+								<div class="col-xs-5">1</div>
+								<div class="col-xs-2">Volume:</div>
+								<div class="col-xs-3">N/A</div>
+							</div>
+							<div class="col-xs-12 row">
+								<div class="col-xs-2">Condition:</div>
+								<div class="col-xs-10">Good; small tear on cover</div>
+							</div>
+							<button class="col-xs-4 col-xs-offset-4 buy-action-btn">Contact Seller</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<!-- Sell Page -->
+			<div class="box col-xs-6 sell-background sell-color" ng-model="sell_clicked" ng-hide="buy_clicked" ng-class="{'this-box-clicked': sell_clicked, 'other-box-clicked': buy_clicked}">
+				<div class="title" ng-click="selected_sell()">sell.</div>
+			</div>
+
+			<div id="sell-mode-options" class="col-xs-6 col-xs-offset-3 emerge" ng-show="sell_clicked">
+				<button class="col-xs-5 sell-mode-btn sell-background sell-color" ng-class="{'sell-btn-default':my_books_mode, 'sell-btn-selected': new_book_mode}" ng-click="selected_new_book_mode()">Sell New Textbook</button>
+				<button class="col-xs-5 col-xs-offset-2 sell-mode-btn sell-background sell-color" ng-class="{'sell-btn-default': new_book_mode, 'sell-btn-selected': my_books_mode}" ng-click="selected_my_books_mode()">View My Textbooks</button>
+			</div>
+
+			<!-- Sell Page: New Book Mode -->
+			<div id="input-form" class="col-xs-6 col-xs-offset-3 emerge" ng-show="new_book_mode">
+				<div class="row">
+					<div class="col-xs-12">
+						<label class="input-label" for="class-name-input">Class Name</label>
+					   	<input type="text" id="class-name-input" class="form-control" placeholder="Calculus II">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<label class="input-label" for="class-num-input">Class No.</label>
+					   	<input type="text" id="class-num-input" class="form-control" placeholder="MATH-34">
+					</div>
+					<div class="col-xs-6">
+						<label class="input-label" for="class-prof-input">Professor</label>
+					   	<input type="text" id="class-prof-input" class="form-control" placeholder="Mary Glaser">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<label class="input-label" for="book-name-input">Book Name</label>
+					   	<input type="text" id="book-name-input" class="form-control" placeholder="Calculus, Early Transcendentals">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<label class="input-label" for="book-author-input">Author</label>
+					   	<input type="text" id="book-author-input" class="form-control" placeholder="William Briggs, Lyle Cochran">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<label class="input-label" for="book-ed-input">Edition</label>
+					   	<input type="text" id="book-ed-input" class="form-control" placeholder="1">
+					</div>
+					<div class="col-xs-6">
+						<label class="input-label" for="book-vol-input">Volume</label>
+					   	<input type="text" id="book-vol-input" class="form-control" placeholder="N/A">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<label class="input-label" for="book-cond-input">Condition</label>
+					   	<input type="text" id="book-cond-input" class="form-control" placeholder="Good; small tear on cover">
+					</div>
+				</div>
+				<button id="sell-submit-btn" class="col-xs-4 col-xs-offset-4 sell-mode-btn sell-btn-default" ng-click="add_new_book()">Add to marketplace</button>
+			</div>
+
+			<!-- Sell Page: My Books Mode -->
+			<div id="sell-search-container" class="col-xs-6 col-xs-offset-3 emerge" ng-show="my_books_mode">
+				<input id="sell-search-box" class="form-control" type="search" placeholder="Start typing a the name of a textbook, class, professor..." ng-model="searchText">
+
+				<!-- Book Results Template -->
+				<div id="sell-search-results">
+					<div class="sell-search-result" ng-model="sell_result_expanded">
+						<div class="sell-result-default row" ng-click="sell_toggle_expansion()">
+							<div class="col-xs-7">Calculus, Early Transcendentals</div>
+							<div class="col-xs-4">William Briggs, Lyle Cochran</div>
+							<span class="col-xs-1 glyphicon glyphicon-menu-down" aria-hidden="true" ng-hide="sell_result_expanded"></span>
+							<span class="col-xs-1 glyphicon glyphicon-menu-up" aria-hidden="true" ng-show="sell_result_expanded"></span>
+						</div>
+						<div class="sell-result-expanded row slide" ng-show="sell_result_expanded">
+							<div class="col-xs-12 row">
+								<div class="col-xs-2">Seller:</div>
+								<div class="col-xs-5">Marcus Mok</div>
+								<div class="col-xs-2">Date:</div>
+								<div class="col-xs-3">09/26/2016</div>
+							</div>
+							<div class="col-xs-12 row">
+								<div class="col-xs-2">Class:</div>
+								<div class="col-xs-10">Calculus II</div>
+							</div>
+							<div class="col-xs-12 row">
+								<div class="col-xs-2">Professor:</div>
+								<div class="col-xs-5">Mary Glaser</div>
+								<div class="col-xs-2">Number:</div>
+								<div class="col-xs-3">MATH-34</div>
+							</div>
+							<div class="col-xs-12 row">
+								<div class="col-xs-2">Edition:</div>
+								<div class="col-xs-5">1</div>
+								<div class="col-xs-2">Volume:</div>
+								<div class="col-xs-3">N/A</div>
+							</div>
+							<div class="col-xs-12 row">
+								<div class="col-xs-2">Condition:</div>
+								<div class="col-xs-10">Good; small tear on cover</div>
+							</div>
+							<button class="col-xs-3 col-xs-offset-2 sell-action-btn">Resolve</button>
+							<button class="col-xs-3 col-xs-offset-2 sell-action-btn">Delete</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+		<!-- Sitemap -->
+		<div id="sitemap" class="row">
+			<div class="col-xs-6">
 				<div id="logo" ng-click="home()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">jumbooks</div>
 				<div class="sitemap-option" ng-click="about()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">about</div>
 				<div class="sitemap-option" ng-click="contact()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">contact</div>
 			</div>
-			<span class="glyphicon glyphicon glyphicon-menu-left emerge" id="back-arrow" aria-hidden="true" ng-click="back()" ng-show="buy_clicked || sell_clicked" ng-class="{'buy-color': buy_clicked, 'sell-color': sell_clicked}"></span>
-			<div class="box col-md-6 buy-background buy-color" ng-model="buy_clicked" ng-hide="sell_clicked" ng-class="{'this-box-clicked': buy_clicked, 'other-box-clicked': sell_clicked}">
-				<p class="title" ng-click="clickedBuy()">buy.</p>
-			</div>
-			<div id="marketplace" class="col-md-6 col-md-offset-3 emerge" ng-show="buy_clicked">
-				<input id="search-box" type="text" placeholder="Start typing a the name of a textbook, class, professor..." ng-model="searchText">
-			</div>
-			<div class="box col-md-6 sell-background sell-color" ng-model="sell_clicked" ng-hide="buy_clicked" ng-class="{'this-box-clicked': sell_clicked, 'other-box-clicked': buy_clicked}">
-				<p class="title" ng-click="clickedSell()">sell.</p>
-			</div>
 		</div>
+
 	</div>
 </body>
 </html>
