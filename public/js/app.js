@@ -26,7 +26,7 @@ jumbooks_mod.run(['$rootScope', '$window', function($rootScope, $window) {
 
 }]);
 
-jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', function($scope, $window) {
+jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function($scope, $window, $http) {
 
     to_default();
 
@@ -111,5 +111,21 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', function($scope, 
         var contactUrl = "http://" + $window.location.host + "/partial/contact.html";
         $window.location.href = contactUrl;
     };
-    
+
+    $scope.keypressEnter = function(keyEvent) {
+        if (keyEvent.which === 13) {
+            $scope.search();
+        }
+    }
+
+    $scope.search = function() {
+        $http({
+            method: 'GET', 
+            url: "http://localhost:8000/search?" + "book_name=" + $scope.searchText
+        }).then(function success(response) {
+            $scope.books = response.data;
+        }, function error(response) {
+            console.log("ERROR");
+        });
+    };
 }]);

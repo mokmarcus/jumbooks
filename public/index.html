@@ -34,43 +34,43 @@
 			</div>
 
 			<div id="buy-search-container" class="col-xs-6 col-xs-offset-3 emerge" ng-show="buy_clicked">
-				<input id="buy-search-box" class="form-control" type="search" placeholder="Start typing a the name of a textbook, class, professor..." ng-model="searchText">
+				<input id="buy-search-box" class="form-control" type="search" placeholder="Start typing a the name of a textbook, class, professor..." ng-model="searchText" ng-keypress="keypressEnter($event)">
 
 				<!-- Book Results Template -->
 				<div id="buy-search-results">
-					<div class="buy-search-result" ng-model="buy_result_expanded">
+					<div ng-repeat="book in books" class="buy-search-result" ng-model="buy_result_expanded">
 						<div class="buy-result-default row" ng-click="buy_toggle_expansion()">
-							<div class="col-xs-7">Calculus, Early Transcendentals</div>
-							<div class="col-xs-4">William Briggs, Lyle Cochran</div>
+							<div class="col-xs-7">{{book.book_name}} </div>
+							<div class="col-xs-4">{{book.book_author}}</div>
 							<span class="col-xs-1 glyphicon glyphicon-menu-down" aria-hidden="true" ng-hide="buy_result_expanded"></span>
 							<span class="col-xs-1 glyphicon glyphicon-menu-up" aria-hidden="true" ng-show="buy_result_expanded"></span>
 						</div>
 						<div class="buy-result-expanded row slide" ng-show="buy_result_expanded">
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Seller:</div>
-								<div class="col-xs-5">Marcus Mok</div>
+								<div class="col-xs-5">{{book.seller_name}}</div>
 								<div class="col-xs-2">Date:</div>
 								<div class="col-xs-3">09/26/2016</div>
 							</div>
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Class:</div>
-								<div class="col-xs-10">Calculus II</div>
+								<div class="col-xs-10">{{book.class_name}}</div>
 							</div>
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Professor:</div>
-								<div class="col-xs-5">Mary Glaser</div>
+								<div class="col-xs-5">{{book.class_prof}}</div>
 								<div class="col-xs-2">Number:</div>
-								<div class="col-xs-3">MATH-34</div>
+								<div class="col-xs-3">{{book.class_id}}</div>
 							</div>
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Edition:</div>
-								<div class="col-xs-5">1</div>
+								<div class="col-xs-5">{{book.book_edition}}</div>
 								<div class="col-xs-2">Volume:</div>
-								<div class="col-xs-3">N/A</div>
+								<div class="col-xs-3">{{book.book_volume}}</div>
 							</div>
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Condition:</div>
-								<div class="col-xs-10">Good; small tear on cover</div>
+								<div class="col-xs-10">{{book.book_condition}}</div>
 							</div>
 							<button class="col-xs-4 col-xs-offset-4 buy-action-btn" ng-click="contact_seller()">Contact Seller</button>
 						</div>
