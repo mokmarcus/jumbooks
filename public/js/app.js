@@ -30,14 +30,7 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', function($scope, 
 
     to_default();
 
-    function to_default(){
-        $scope.buy_clicked = false;
-        $scope.sell_clicked = false;
-        $scope.my_books_mode = false;
-        $scope.new_book_mode = false;
-        $scope.buy_result_expanded = false;
-        $scope.sell_result_expanded = false;
-    }
+    /* Buy functions */
 
     $scope.selected_buy = function() {
     	$scope.buy_clicked = true;
@@ -47,9 +40,13 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', function($scope, 
         $scope.buy_result_expanded = !($scope.buy_result_expanded);
     };
 
-    $scope.sell_toggle_expansion = function() {
-        $scope.sell_result_expanded = !($scope.sell_result_expanded);
-    };
+    $scope.contact_seller = function() {
+
+        //TODO: Contact seller via Facebook
+
+    }
+
+    /* Sell functions */
 
     $scope.selected_sell = function() {
     	$scope.sell_clicked = true;
@@ -66,9 +63,34 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', function($scope, 
         $scope.new_book_mode = false;
     }
 
-    $scope.add_new_book = function() {
+    $scope.add_book_entry = function() {
         $scope.my_books_mode = true;
         $scope.new_book_mode = false;
+
+        //TODO: Add book
+
+        $scope.input = null;
+    }
+
+    $scope.sell_toggle_expansion = function() {
+        $scope.sell_result_expanded = !($scope.sell_result_expanded);
+    };
+
+    $scope.resolve_book_entry = function() {
+
+        //TODO: Remove book
+
+    }
+
+    /* General functions */
+
+    function to_default(){
+        $scope.buy_clicked = false;
+        $scope.sell_clicked = false;
+        $scope.my_books_mode = false;
+        $scope.new_book_mode = false;
+        $scope.buy_result_expanded = false;
+        $scope.sell_result_expanded = false;
     }
 
     $scope.back = function() {
@@ -89,4 +111,5 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', function($scope, 
         var contactUrl = "http://" + $window.location.host + "/partial/contact.html";
         $window.location.href = contactUrl;
     };
+    
 }]);
