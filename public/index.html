@@ -12,8 +12,8 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-touch.js"></script>
 	<script type="text/javascript" src="js/ui-bootstrap-tpls-2.1.4.min.js"></script>
-	<script src="http://connect.facebook.net/en_US/sdk.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="js/facebook.js"></script>
 	<link rel="stylesheet" href="css/all.css"/>
 	<link rel="stylesheet" href="css/index.css"/>
 	<link rel="stylesheet" href="css/buy_page.css"/>
@@ -22,6 +22,7 @@
 </head>
 
 <body ng-app="jumbooks_mod" ng-controller="jumbooks_ctrl">
+	<div id="fb-root"></div>
 	<div class="container-fluid">
 		<div class="row">
 
@@ -34,14 +35,15 @@
 			</div>
 
 			<div id="buy-search-container" class="col-xs-6 col-xs-offset-3 emerge" ng-show="buy_clicked">
-				<input id="buy-search-box" class="form-control" type="search" placeholder="Start typing a the name of a textbook, class, professor..." ng-model="searchText" ng-keypress="keypressEnter($event)">
+				<input id="buy-search-box" class="form-control" type="search" placeholder="Search by book name" ng-model="search_text" ng-keypress="key_press_enter($event)">
 
 				<!-- Book Results Template -->
 				<div id="buy-search-results">
-					<div ng-repeat="book in books" class="buy-search-result" ng-model="buy_result_expanded">
+					<div  class="buy-search-result" ng-repeat="book in books" ng-model="buy_result_expanded">
 						<div class="buy-result-default row" ng-click="buy_toggle_expansion()">
 							<div class="col-xs-7">{{book.book_name}} </div>
-							<div class="col-xs-4">{{book.book_author}}</div>
+							<div class="col-xs-3">{{book.book_author}}</div>
+							<div class="col-xs-1">{{book.price}}</div>
 							<span class="col-xs-1 glyphicon glyphicon-menu-down" aria-hidden="true" ng-hide="buy_result_expanded"></span>
 							<span class="col-xs-1 glyphicon glyphicon-menu-up" aria-hidden="true" ng-show="buy_result_expanded"></span>
 						</div>
@@ -50,7 +52,7 @@
 								<div class="col-xs-2">Seller:</div>
 								<div class="col-xs-5">{{book.seller_name}}</div>
 								<div class="col-xs-2">Date:</div>
-								<div class="col-xs-3">09/26/2016</div>
+								<div class="col-xs-3">{{book.date}}</div>
 							</div>
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Class:</div>
@@ -100,7 +102,7 @@
 				<div class="row">
 					<div class="col-xs-6">
 						<label class="input-label" for="class-num-input">Class No.</label>
-					   	<input type="text" id="class-num-input" class="form-control" ng-model="input.class_num" placeholder="MATH-34">
+					   	<input type="text" id="class-num-input" class="form-control" ng-model="input.class_id" placeholder="MATH-34">
 					</div>
 					<div class="col-xs-6">
 						<label class="input-label" for="class-prof-input">Professor</label>
@@ -114,25 +116,29 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-xs-6">
 						<label class="input-label" for="book-author-input">Author</label>
 					   	<input type="text" id="book-author-input" class="form-control" ng-model="input.book_author" placeholder="William Briggs, Lyle Cochran">
+					</div>
+					<div class="col-xs-6">
+						<label class="input-label" for="book-price-input">Price</label>
+					   	<input type="text" id="book-price-input" class="form-control" ng-model="input.book_price" placeholder="70">
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-6">
 						<label class="input-label" for="book-ed-input">Edition</label>
-					   	<input type="text" id="book-ed-input" class="form-control" ng-model="input.book_ed" placeholder="1">
+					   	<input type="text" id="book-ed-input" class="form-control" ng-model="input.book_edition" placeholder="1">
 					</div>
 					<div class="col-xs-6">
 						<label class="input-label" for="book-vol-input">Volume</label>
-					   	<input type="text" id="book-vol-input" class="form-control" ng-model="input.book_vol" placeholder="N/A">
+					   	<input type="text" id="book-vol-input" class="form-control" ng-model="input.book_volume" placeholder="N/A">
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
 						<label class="input-label" for="book-cond-input">Condition</label>
-					   	<input type="text" id="book-cond-input" class="form-control" ng-model="input.book_cond" placeholder="Good; small tear on cover">
+					   	<input type="text" id="book-cond-input" class="form-control" ng-model="input.book_condition" placeholder="Good; small tear on cover">
 					</div>
 				</div>
 				<button id="sell-submit-btn" class="col-xs-4 col-xs-offset-4 sell-mode-btn sell-btn-default" ng-click="add_book_entry()">Add to marketplace</button>
@@ -140,43 +146,44 @@
 
 			<!-- Sell Page: My Books Mode -->
 			<div id="sell-search-container" class="col-xs-6 col-xs-offset-3 emerge" ng-show="my_books_mode">
-				<input id="sell-search-box" class="form-control" type="search" placeholder="Start typing a the name of a textbook, class, professor..." ng-model="searchText">
+				<input id="sell-search-box" class="form-control" type="search" placeholder="Start typing a the name of a textbook, class, professor..." ng-model="search_text" ng-keypress="key_press_enter($event)">
 
 				<!-- Book Results Template -->
 				<div id="sell-search-results">
-					<div class="sell-search-result" ng-model="sell_result_expanded">
+					<div class="sell-search-result" ng-repeat="book in books" ng-model="sell_result_expanded">
 						<div class="sell-result-default row" ng-click="sell_toggle_expansion()">
-							<div class="col-xs-7">Calculus, Early Transcendentals</div>
-							<div class="col-xs-4">William Briggs, Lyle Cochran</div>
+							<div class="col-xs-7">{{book.book_name}}</div>
+							<div class="col-xs-3">{{book.book_author}}</div>
+							<div class="col-xs-1">{{book.book_price}}</div>
 							<span class="col-xs-1 glyphicon glyphicon-menu-down" aria-hidden="true" ng-hide="sell_result_expanded"></span>
 							<span class="col-xs-1 glyphicon glyphicon-menu-up" aria-hidden="true" ng-show="sell_result_expanded"></span>
 						</div>
 						<div class="sell-result-expanded row slide" ng-show="sell_result_expanded">
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Seller:</div>
-								<div class="col-xs-5">Marcus Mok</div>
+								<div class="col-xs-5">{{book.seller_name}}</div>
 								<div class="col-xs-2">Date:</div>
-								<div class="col-xs-3">09/26/2016</div>
+								<div class="col-xs-3">{{book.date}}</div>
 							</div>
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Class:</div>
-								<div class="col-xs-10">Calculus II</div>
+								<div class="col-xs-10">{{book.class_name}}</div>
 							</div>
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Professor:</div>
-								<div class="col-xs-5">Mary Glaser</div>
+								<div class="col-xs-5">{{book.class_prof}}</div>
 								<div class="col-xs-2">Number:</div>
-								<div class="col-xs-3">MATH-34</div>
+								<div class="col-xs-3">{{book.class_id}}</div>
 							</div>
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Edition:</div>
-								<div class="col-xs-5">1</div>
+								<div class="col-xs-5">{{book.book_edition}}</div>
 								<div class="col-xs-2">Volume:</div>
-								<div class="col-xs-3">N/A</div>
+								<div class="col-xs-3">{{book.book_volume}}</div>
 							</div>
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Condition:</div>
-								<div class="col-xs-10">Good; small tear on cover</div>
+								<div class="col-xs-10">{{book.book_condition}}</div>
 							</div>
 							<button class="col-xs-4 col-xs-offset-4 sell-action-btn" ng-click="resolve_book_entry()">Resolve</button>
 						</div>
