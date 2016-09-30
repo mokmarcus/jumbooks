@@ -78,21 +78,14 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
     };
 
     $scope.add_book_entry = function() {
-        $scope.sell_mode.my_books_mode = {};
-        $scope.sell_mode.new_book_mode = null;
-
-        //For Testing
-        $scope.input.seller_name = "Marcus Mok";
-        $scope.input.seller_id = "12345";
-
         var book_info = "book_name=" + $scope.input.book_name
                       + "&book_author=" + $scope.input.book_author
                       + "&book_volume=" + $scope.input.book_volume
                       + "&book_edition=" + $scope.input.book_edition
                       + "&book_condition=" + $scope.input.book_condition
                       + "&book_price=" + $scope.input.book_price
-                      + "&seller_name=" + $scope.input.seller_name
-                      + "&seller_id=" + $scope.input.seller_id
+                      + "&seller_name=" + $scope.fb_name
+                      + "&seller_id=" + $scope.fb_id
                       + "&class_name=" + $scope.input.class_name
                       + "&class_id=" + $scope.input.class_id
                       + "&class_prof=" + $scope.input.class_prof;
@@ -106,7 +99,10 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
             data: book_info
         }).then(function success(response) {
             console.log("SUCCESS");
+            $scope.sell_mode.my_books_mode = {};
+            $scope.sell_mode.new_book_mode = null;
             $scope.input = null;
+            $scope.search_my_books();
         }, function error(response) {
             console.log("ERROR");
         });
@@ -120,14 +116,28 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
         }
     };
 
-    $scope.resolve_book_entry = function() {
-
+    $scope.resolve_book_entry = function(book) {
+        $http({
+            method: 'DELETE',
+            url: "http://localhost:8000/delete?book_id=" + book._id
+        }).then(function success(response) {
+            console.log(response);
+        }, function error(response) {
+            console.log("ERROR");
+        });
+        book.hidden = true;
     };
 
     $scope.search_my_books = function() {
+        if ($scope.sell_mode.my_books_mode.search_text) {
+            search_text = $scope.sell_mode.my_books_mode.search_text;
+        } else {
+            search_text = " ";
+        }
+
         $http({
             method: 'GET',
-            url: "http://localhost:8000/search?" + "seller_id=" + $scope.fb_id  + "&book_name=" + $scope.sell_mode.my_books_mode.search_text
+            url: "http://localhost:8000/search?" + "seller_id=" + $scope.fb_id  + "&book_name=" + search_text
         }).then(function success(response) {
             $scope.sell_mode.my_books_mode.books = response.data;
         }, function error(response) {
@@ -179,6 +189,7 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
                     if (response.authResponse) {
                         FB.api('/me', function(response) {
                             $scope.fb_id = response.id;
+                            $scope.fb_name = response.name;
                         });
                         $scope.fb_btn_label = "logout";
                     } else {
@@ -190,18 +201,5 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
                 FB.logout();
             }
         });
-    };
-
-    $scope.resolve_book_entry = function(book) {
-        $http({
-            method: 'DELETE',
-            url: "http://localhost:8000/delete?book_id=" + book._id
-        }).then(function success(response) {
-            console.log(response);
-        }, function error(response) {
-            console.log("ERROR");
-        });
-
-        book.hidden = true;
     };
 }]);
