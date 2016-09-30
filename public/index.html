@@ -42,35 +42,35 @@
 						<div class="buy-result-default row" ng-click="buy_toggle_expansion($index)">
 							<div class="col-xs-7">{{book.book_name}}</div>
 							<div class="col-xs-3">{{book.book_author}}</div>
-							<div class="col-xs-1">{{book.book_price}}</div>
+							<div class="col-xs-1">${{book.book_price}}</div>
 							<span class="col-xs-1 glyphicon glyphicon-menu-down" aria-hidden="true" ng-hide="book.expand"></span>
 							<span class="col-xs-1 glyphicon glyphicon-menu-up" aria-hidden="true" ng-show="book.expand"></span>
 						</div>
 						<div class="buy-result-expanded row slide" ng-show="book.expand">
 							<div class="col-xs-12 row">
-								<div class="col-xs-2">Seller:</div>
+								<div class="col-xs-2 buy-result-title">Seller:</div>
 								<div class="col-xs-5">{{book.seller_name}}</div>
-								<div class="col-xs-2">Date:</div>
+								<div class="col-xs-2 buy-result-title">Date:</div>
 								<div class="col-xs-3">{{book.date}}</div>
 							</div>
 							<div class="col-xs-12 row">
-								<div class="col-xs-2">Class:</div>
+								<div class="col-xs-2 buy-result-title">Class:</div>
 								<div class="col-xs-10">{{book.class_name}}</div>
 							</div>
 							<div class="col-xs-12 row">
-								<div class="col-xs-2">Professor:</div>
+								<div class="col-xs-2 buy-result-title">Professor:</div>
 								<div class="col-xs-5">{{book.class_prof}}</div>
-								<div class="col-xs-2">Number:</div>
+								<div class="col-xs-2 buy-result-title">Number:</div>
 								<div class="col-xs-3">{{book.class_id}}</div>
 							</div>
 							<div class="col-xs-12 row">
-								<div class="col-xs-2">Edition:</div>
+								<div class="col-xs-2 buy-result-title">Edition:</div>
 								<div class="col-xs-5">{{book.book_edition}}</div>
-								<div class="col-xs-2">Volume:</div>
+								<div class="col-xs-2 buy-result-title">Volume:</div>
 								<div class="col-xs-3">{{book.book_volume}}</div>
 							</div>
 							<div class="col-xs-12 row">
-								<div class="col-xs-2">Condition:</div>
+								<div class="col-xs-2 buy-result-title">Condition:</div>
 								<div class="col-xs-10">{{book.book_condition}}</div>
 							</div>
 							<button class="col-xs-4 col-xs-offset-4 buy-action-btn" ng-click="contact_seller(book)">Contact Seller</button>
@@ -153,35 +153,35 @@
 						<div class="sell-result-default row" ng-click="sell_toggle_expansion($index)">
 							<div class="col-xs-7">{{book.book_name}}</div>
 							<div class="col-xs-3">{{book.book_author}}</div>
-							<div class="col-xs-1">{{book.book_price}}</div>
+							<div class="col-xs-1">${{book.book_price}}</div>
 							<span class="col-xs-1 glyphicon glyphicon-menu-down" aria-hidden="true" ng-hide="book.expand"></span>
 							<span class="col-xs-1 glyphicon glyphicon-menu-up" aria-hidden="true" ng-show="book.expand"></span>
 						</div>
 						<div class="sell-result-expanded row slide" ng-show="book.expand">
 							<div class="col-xs-12 row">
-								<div class="col-xs-2">Seller:</div>
+								<div class="col-xs-2 sell-result-title">Seller:</div>
 								<div class="col-xs-5">{{book.seller_name}}</div>
-								<div class="col-xs-2">Date:</div>
+								<div class="col-xs-2 sell-result-title">Date:</div>
 								<div class="col-xs-3">{{book.date}}</div>
 							</div>
 							<div class="col-xs-12 row">
-								<div class="col-xs-2">Class:</div>
+								<div class="col-xs-2 sell-result-title">Class:</div>
 								<div class="col-xs-10">{{book.class_name}}</div>
 							</div>
 							<div class="col-xs-12 row">
-								<div class="col-xs-2">Professor:</div>
+								<div class="col-xs-2 sell-result-title">Professor:</div>
 								<div class="col-xs-5">{{book.class_prof}}</div>
-								<div class="col-xs-2">Number:</div>
+								<div class="col-xs-2 sell-result-title">Number:</div>
 								<div class="col-xs-3">{{book.class_id}}</div>
 							</div>
 							<div class="col-xs-12 row">
-								<div class="col-xs-2">Edition:</div>
+								<div class="col-xs-2 sell-result-title">Edition:</div>
 								<div class="col-xs-5">{{book.book_edition}}</div>
-								<div class="col-xs-2">Volume:</div>
+								<div class="col-xs-2 sell-result-title">Volume:</div>
 								<div class="col-xs-3">{{book.book_volume}}</div>
 							</div>
 							<div class="col-xs-12 row">
-								<div class="col-xs-2">Condition:</div>
+								<div class="col-xs-2 sell-result-title">Condition:</div>
 								<div class="col-xs-10">{{book.book_condition}}</div>
 							</div>
 							<button class="col-xs-4 col-xs-offset-4 sell-action-btn" ng-click="resolve_book_entry(book)">Resolve</button>
