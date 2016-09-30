@@ -32,6 +32,7 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
 
     $scope.selected_buy = function() {
     	$scope.buy_mode = {};
+        $scope.search_books();
     };
 
     $scope.buy_toggle_expansion = function(index) {
@@ -49,6 +50,10 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
     }
 
     $scope.search_books = function() {
+        if (!$scope.buy_mode.search_text) {
+            $scope.buy_mode.search_text = ' ';
+        } 
+
         $http({
             method: 'GET',
             url: "http://localhost:8000/search?" + "book_name=" + $scope.buy_mode.search_text
@@ -213,8 +218,6 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
     };
 
     $scope.contact_seller = function(book) {
-        console.log("in contact seller");
-        console.log("seller_id is :" + book.seller_id);
         FB.ui({
             app_id:'1368300386515295',
             method: 'send',
