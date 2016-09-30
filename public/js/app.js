@@ -54,8 +54,12 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
     	$scope.buy_clicked = true;
     };
 
-    $scope.buy_toggle_expansion = function() {
-        $scope.buy_result_expanded = !($scope.buy_result_expanded);
+    $scope.buy_toggle_expansion = function(index) {
+        if (!$scope.books[index].expand) {
+            $scope.books[index].expand = true;
+        } else {
+            $scope.books[index].expand = false;
+        }
     };
 
     $scope.contact_seller = function() {

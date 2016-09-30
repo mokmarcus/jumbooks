@@ -39,15 +39,15 @@
 
 				<!-- Book Results Template -->
 				<div id="buy-search-results">
-					<div  class="buy-search-result" ng-repeat="book in books" ng-model="buy_result_expanded">
-						<div class="buy-result-default row" ng-click="buy_toggle_expansion()">
-							<div class="col-xs-7">{{book.book_name}} </div>
+					<div  class="buy-search-result" ng-repeat="book in books">
+						<div class="buy-result-default row" ng-model="buy_result_expanded" ng-click="buy_toggle_expansion($index)">
+							<div class="col-xs-7">{{book.book_name}}</div>
 							<div class="col-xs-3">{{book.book_author}}</div>
 							<div class="col-xs-1">{{book.price}}</div>
-							<span class="col-xs-1 glyphicon glyphicon-menu-down" aria-hidden="true" ng-hide="buy_result_expanded"></span>
-							<span class="col-xs-1 glyphicon glyphicon-menu-up" aria-hidden="true" ng-show="buy_result_expanded"></span>
+							<span class="col-xs-1 glyphicon glyphicon-menu-down" aria-hidden="true" ng-hide="book.expand"></span>
+							<span class="col-xs-1 glyphicon glyphicon-menu-up" aria-hidden="true" ng-show="book.expand"></span>
 						</div>
-						<div class="buy-result-expanded row slide" ng-show="buy_result_expanded">
+						<div class="buy-result-expanded row slide" ng-show="book.expand">
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Seller:</div>
 								<div class="col-xs-5">{{book.seller_name}}</div>
