@@ -126,7 +126,7 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
     $scope.search_my_books = function() {
         $http({
             method: 'GET',
-            url: "http://localhost:8000/search?" + "seller_id=" + "12345" + "&book_name=" + $scope.sell_mode.my_books_mode.search_text
+            url: "http://localhost:8000/search?" + "seller_id=" + "fb_login_num" + "&book_name=" + $scope.sell_mode.my_books_mode.search_text
         }).then(function success(response) {
             $scope.sell_mode.my_books_mode.books = response.data;
         }, function error(response) {
@@ -185,6 +185,17 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
                     }
                 });
             }
+        });
+    };
+
+    $scope.resolve_book_entry = function(book_id) {
+        $http({
+            method: 'DELETE',
+            url: "http://localhost:8000/delete?book_id=" + book_id
+        }).then(function success(response) {
+            console.log(response);
+        }, function error(response) {
+            console.log("ERROR");
         });
     };
 }]);
