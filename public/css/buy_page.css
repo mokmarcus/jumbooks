@@ -23,3 +23,8 @@
 .buy-action-btn {
 	margin-top: 10px;
 }
+
+#buy-search-results {
+	overflow: scroll;
+	height: 500px;
+}
