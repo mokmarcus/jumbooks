@@ -211,4 +211,17 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
             }
         });
     };
+
+    $scope.contact_seller = function(book) {
+        console.log("in contact seller");
+        console.log("seller_id is :" + book.seller_id);
+        FB.ui({
+            app_id:'1368300386515295',
+            method: 'send',
+            name: "Book Request",
+            to: book.seller_id,
+            link: "http://jumbooks.herokuapp.com/",
+            description:"Hello, Can I buy your book?"
+        });
+    };
 }]);
