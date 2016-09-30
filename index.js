@@ -8,7 +8,8 @@ app.use(bodyParser.json());
 
 //MONGO URI mongodb://heroku_cg298mb6:33hagtgt4p1bimt1ruiht6vt6j@ds029106.mlab.com:29106/heroku_cg298mb6
 var mongoUri = process.env.MONGOLABURI || process.env.MONGOHQ_URL || 'mongodb://heroku_cg298mb6:33hagtgt4p1bimt1ruiht6vt6j@ds029106.mlab.com:29106/heroku_cg298mb6';
-var MongoClient = require('mongodb').MongoClient, format = require('util').format;
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient, format = require('util').format;
 var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
     db = databaseConnection;
 });
@@ -66,5 +67,13 @@ app.get('/search', function(request, response) {
         }
     });
 });
+
+app.delete('/delete', function(request, response) {
+    db.collection('books').remove({"_id": new mongodb.ObjectId(request.body._id)}, function(error, results) {
+        response.send("Deleted the book id: " + request.body._id);
+    });
+});
+
+
 
 app.listen(process.env.PORT || 8000);
