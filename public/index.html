@@ -51,7 +51,7 @@
 								<div class="col-xs-2 buy-result-title">Seller:</div>
 								<div class="col-xs-5">{{book.seller_name}}</div>
 								<div class="col-xs-2 buy-result-title">Date:</div>
-								<div class="col-xs-3">{{book.date}}</div>
+								<div class="col-xs-3">{{book.date | date : "MM/dd/y"}}</div>
 							</div>
 							<div class="col-xs-12 row">
 								<div class="col-xs-2 buy-result-title">Class:</div>
@@ -162,7 +162,7 @@
 								<div class="col-xs-2 sell-result-title">Seller:</div>
 								<div class="col-xs-5">{{book.seller_name}}</div>
 								<div class="col-xs-2 sell-result-title">Date:</div>
-								<div class="col-xs-3">{{book.date}}</div>
+								<div class="col-xs-3">{{book.date | date : "MM/dd/y"}}</div>
 							</div>
 							<div class="col-xs-12 row">
 								<div class="col-xs-2 sell-result-title">Class:</div>
