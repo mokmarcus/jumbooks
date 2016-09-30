@@ -23,50 +23,6 @@ jumbooks_mod.run(['$rootScope', '$window', function($rootScope, $window)  {
     }(document, 'script', 'facebook-jssdk')); 
 }]);
 
-/* This the "main function": it runs before everything else */
-// jumbooks_mod.run(['$rootScope', '$window', function($rootScope, $window) {
-//     $window.fbAsyncInit = function () {
-//         FB.init({
-//             appId: '1368300386515295',
-//             status: true,
-//             cookie: true,
-//             xfbml: true,
-//             version: 'v2.7'
-//         });
-        
-//         check_login_status();
-
-//         // FB.Event.subscribe('auth.statusChange', function(response) {
-//         //     console.log(response);
-//         //     // $rootScope.$broadcast("fb_statusChange", {'status': response.status});
-//         // });
-//     };
-
-//     (function(d, s, id){
-//         var js, fjs = d.getElementsByTagName(s)[0];
-//         if (d.getElementById(id)) {
-//             return;
-//         }
-//         js = d.createElement(s);
-//         js.id = id;
-//         js.src = "//connect.facebook.net/en_US/sdk.js";
-//         fjs.parentNode.insertBefore(js, fjs);
-//     }(document, 'script', 'facebook-jssdk'));
-
-// }]);
-
-// function check_login_status() {
-//     FB.getLoginStatus(function(response) {
-//         console.log(response);
-//         // if (response.status === 'connected') {
-//         //     logged_in();
-//         // }
-//         // else {
-//         //     logged_out();
-//         // }
-//     }, true);   
-// }
-
 jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function($scope, $window, $http) {
 
     to_default();
@@ -74,14 +30,14 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
     /* Buy functions */
 
     $scope.selected_buy = function() {
-    	$scope.buy_clicked = true;
+    	$scope.buy_mode = {};
     };
 
     $scope.buy_toggle_expansion = function(index) {
-        if (!$scope.books[index].expand) {
-            $scope.books[index].expand = true;
+        if (!$scope.buy_mode.books[index].expand) {
+            $scope.buy_mode.books[index].expand = true;
         } else {
-            $scope.books[index].expand = false;
+            $scope.buy_mode.books[index].expand = false;
         }
     };
 
@@ -91,26 +47,38 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
 
     }
 
+    $scope.search_books = function() {
+        $http({
+            method: 'GET',
+            url: "http://localhost:8000/search?" + "book_name=" + $scope.buy_mode.search_text
+        }).then(function success(response) {
+            $scope.buy_mode.books = response.data;
+        }, function error(response) {
+            console.log("ERROR");
+        });
+    };
+
     /* Sell functions */
 
     $scope.selected_sell = function() {
-    	$scope.sell_clicked = true;
-        $scope.new_book_mode = true;
+        $scope.sell_mode = {
+            'new_book_mode': true
+        };
     };
 
     $scope.selected_new_book_mode = function() {
-        $scope.new_book_mode = true;
-        $scope.my_books_mode = false;
+        $scope.sell_mode.new_book_mode = {};
+        $scope.sell_mode.my_books_mode = null;
     };
 
     $scope.selected_my_books_mode = function() {
-        $scope.my_books_mode = true;
-        $scope.new_book_mode = false;
+        $scope.sell_mode.my_books_mode = {};
+        $scope.sell_mode.new_book_mode = null;
     };
 
     $scope.add_book_entry = function() {
-        $scope.my_books_mode = true;
-        $scope.new_book_mode = false;
+        $scope.sell_mode.my_books_mode = {};
+        $scope.sell_mode.new_book_mode = null;
 
         //For Testing
         $scope.input.seller_name = "Marcus Mok";
@@ -143,25 +111,34 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
         });
     };
 
-    $scope.sell_toggle_expansion = function() {
-        $scope.sell_result_expanded = !($scope.sell_result_expanded);
+    $scope.sell_toggle_expansion = function(index) {
+        if (!$scope.sell_mode.my_books_mode.books[index].expand) {
+            $scope.sell_mode.my_books_mode.books[index].expand = true;
+        } else {
+            $scope.sell_mode.my_books_mode.books[index].expand = false;
+        }
     };
 
     $scope.resolve_book_entry = function() {
 
     };
 
+    $scope.search_my_books = function() {
+        $http({
+            method: 'GET',
+            url: "http://localhost:8000/search?" + "seller_id=" + "12345" + "&book_name=" + $scope.sell_mode.my_books_mode.search_text
+        }).then(function success(response) {
+            $scope.sell_mode.my_books_mode.books = response.data;
+        }, function error(response) {
+            console.log("ERROR");
+        });
+    };
+
     /* General functions */
 
     function to_default(){
-        $scope.buy_clicked = false;
-        $scope.sell_clicked = false;
-        $scope.my_books_mode = false;
-        $scope.new_book_mode = false;
-        $scope.buy_result_expanded = false;
-        $scope.sell_result_expanded = false;
-        $scope.search_text = null;
-        $scope.books = null;
+        $scope.buy_mode = null;
+        $scope.sell_mode = null;
     }
 
     $scope.back = function() {
@@ -183,38 +160,16 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
         $window.location.href = contact_url;
     };
 
-    $scope.key_press_enter = function(keyEvent, mode) {
+    $scope.key_press_enter = function(keyEvent) {
         if (keyEvent.which === 13) {
-            if ($scope.buy_clicked) {
+            if ($scope.buy_mode) {
                 $scope.search_books();
             }
-            else if ($scope.sell_clicked && $scope.my_books_mode) {
+            else if ($scope.sell_mode.my_books_mode) {
                 $scope.search_my_books();
             }
         }
     }
-
-    $scope.search_books = function() {
-        $http({
-            method: 'GET',
-            url: "http://localhost:8000/search?" + "book_name=" + $scope.search_text
-        }).then(function success(response) {
-            $scope.books = response.data;
-        }, function error(response) {
-            console.log("ERROR");
-        });
-    };
-
-    $scope.search_my_books = function() {
-        $http({
-            method: 'GET',
-            url: "http://localhost:8000/search?" + "seller_id=" + "12345" + "&book_name=" + $scope.search_text
-        }).then(function success(response) {
-            $scope.books = response.data;
-        }, function error(response) {
-            console.log("ERROR");
-        });
-    };
 
     $scope.FBLogin = function() {
         FB.getLoginStatus(function(response) {

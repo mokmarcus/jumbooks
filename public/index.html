@@ -25,20 +25,20 @@
 		<div class="row">
 
 			<!-- Back Button -->
-			<span class="glyphicon glyphicon glyphicon-menu-left emerge" id="back-arrow" aria-hidden="true" ng-click="back()" ng-show="buy_clicked || sell_clicked" ng-class="{'buy-color': buy_clicked, 'sell-color': sell_clicked}"></span>
+			<span class="glyphicon glyphicon glyphicon-menu-left emerge" id="back-arrow" aria-hidden="true" ng-click="back()" ng-show="buy_mode || sell_mode" ng-class="{'buy-color': buy_mode, 'sell-color': sell_mode}"></span>
 
 			<!-- Buy Page -->
-			<div class="box col-xs-6 buy-background buy-color" ng-model="buy_clicked" ng-hide="sell_clicked" ng-class="{'this-box-clicked': buy_clicked, 'other-box-clicked': sell_clicked}">
+			<div class="box col-xs-6 buy-background buy-color" ng-model="buy_mode" ng-hide="sell_mode" ng-class="{'this-box-clicked': buy_mode, 'other-box-clicked': sell_mode}">
 				<div class="title" ng-click="selected_buy()">buy.</div>
 			</div>
 
-			<div id="buy-search-container" class="col-xs-6 col-xs-offset-3 emerge" ng-show="buy_clicked">
-				<input id="buy-search-box" class="form-control" type="search" placeholder="Search by book name" ng-model="search_text" ng-keypress="key_press_enter($event)">
+			<div id="buy-search-container" class="col-xs-6 col-xs-offset-3 emerge" ng-show="buy_mode">
+				<input id="buy-search-box" class="form-control" type="search" placeholder="Search by book name" ng-model="buy_mode.search_text" ng-keypress="key_press_enter($event)">
 
 				<!-- Book Results Template -->
 				<div id="buy-search-results">
-					<div  class="buy-search-result" ng-repeat="book in books">
-						<div class="buy-result-default row" ng-model="buy_result_expanded" ng-click="buy_toggle_expansion($index)">
+					<div  class="buy-search-result" ng-repeat="book in buy_mode.books">
+						<div class="buy-result-default row" ng-click="buy_toggle_expansion($index)">
 							<div class="col-xs-7">{{book.book_name}}</div>
 							<div class="col-xs-3">{{book.book_author}}</div>
 							<div class="col-xs-1">{{book.price}}</div>
@@ -80,17 +80,17 @@
 			</div>
 
 			<!-- Sell Page -->
-			<div class="box col-xs-6 sell-background sell-color" ng-model="sell_clicked" ng-hide="buy_clicked" ng-class="{'this-box-clicked': sell_clicked, 'other-box-clicked': buy_clicked}">
+			<div class="box col-xs-6 sell-background sell-color" ng-model="sell_mode" ng-hide="buy_mode" ng-class="{'this-box-clicked': sell_mode, 'other-box-clicked': buy_mode}">
 				<div class="title" ng-click="selected_sell()">sell.</div>
 			</div>
 
-			<div id="sell-mode-options" class="col-xs-6 col-xs-offset-3 emerge" ng-show="sell_clicked">
-				<button class="col-xs-5 sell-mode-btn sell-background sell-color" ng-class="{'sell-btn-default':my_books_mode, 'sell-btn-selected': new_book_mode}" ng-click="selected_new_book_mode()">Sell New Textbook</button>
-				<button class="col-xs-5 col-xs-offset-2 sell-mode-btn sell-background sell-color" ng-class="{'sell-btn-default': new_book_mode, 'sell-btn-selected': my_books_mode}" ng-click="selected_my_books_mode()">View My Textbooks</button>
+			<div id="sell-mode-options" class="col-xs-6 col-xs-offset-3 emerge" ng-show="sell_mode">
+				<button class="col-xs-5 sell-mode-btn sell-background sell-color" ng-class="{'sell-btn-default': sell_mode.my_books_mode, 'sell-btn-selected': sell_mode.new_book_mode}" ng-click="selected_new_book_mode()">Sell New Textbook</button>
+				<button class="col-xs-5 col-xs-offset-2 sell-mode-btn sell-background sell-color" ng-class="{'sell-btn-default': sell_mode.new_book_mode, 'sell-btn-selected': sell_mode.my_books_mode}" ng-click="selected_my_books_mode()">View My Textbooks</button>
 			</div>
 
 			<!-- Sell Page: New Book Mode -->
-			<div id="input-form" class="col-xs-6 col-xs-offset-3 emerge" ng-show="new_book_mode">
+			<div id="input-form" class="col-xs-6 col-xs-offset-3 emerge" ng-show="sell_mode.new_book_mode">
 				<div class="row">
 					<div class="col-xs-12">
 						<label class="input-label" for="class-name-input">Class Name</label>
@@ -143,20 +143,20 @@
 			</div>
 
 			<!-- Sell Page: My Books Mode -->
-			<div id="sell-search-container" class="col-xs-6 col-xs-offset-3 emerge" ng-show="my_books_mode">
-				<input id="sell-search-box" class="form-control" type="search" placeholder="Start typing a the name of a textbook, class, professor..." ng-model="search_text" ng-keypress="key_press_enter($event)">
+			<div id="sell-search-container" class="col-xs-6 col-xs-offset-3 emerge" ng-show="sell_mode.my_books_mode">
+				<input id="sell-search-box" class="form-control" type="search" placeholder="Start typing a the name of a textbook, class, professor..." ng-model="sell_mode.my_books_mode.search_text" ng-keypress="key_press_enter($event)">
 
 				<!-- Book Results Template -->
 				<div id="sell-search-results">
-					<div class="sell-search-result" ng-repeat="book in books" ng-model="sell_result_expanded">
-						<div class="sell-result-default row" ng-click="sell_toggle_expansion()">
+					<div class="sell-search-result" ng-repeat="book in sell_mode.my_books_mode.books">
+						<div class="sell-result-default row" ng-click="sell_toggle_expansion($index)">
 							<div class="col-xs-7">{{book.book_name}}</div>
 							<div class="col-xs-3">{{book.book_author}}</div>
 							<div class="col-xs-1">{{book.book_price}}</div>
-							<span class="col-xs-1 glyphicon glyphicon-menu-down" aria-hidden="true" ng-hide="sell_result_expanded"></span>
-							<span class="col-xs-1 glyphicon glyphicon-menu-up" aria-hidden="true" ng-show="sell_result_expanded"></span>
+							<span class="col-xs-1 glyphicon glyphicon-menu-down" aria-hidden="true" ng-hide="book.expand"></span>
+							<span class="col-xs-1 glyphicon glyphicon-menu-up" aria-hidden="true" ng-show="book.expand"></span>
 						</div>
-						<div class="sell-result-expanded row slide" ng-show="sell_result_expanded">
+						<div class="sell-result-expanded row slide" ng-show="book.expand">
 							<div class="col-xs-12 row">
 								<div class="col-xs-2">Seller:</div>
 								<div class="col-xs-5">{{book.seller_name}}</div>
@@ -195,10 +195,12 @@
 		<!-- Sitemap -->
 		<div id="sitemap" class="row">
 			<div class="col-xs-6">
-				<div id="logo" ng-click="home()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">jumbooks</div>
-				<div class="sitemap-option" ng-click="about()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">about</div>
-				<div class="sitemap-option" ng-click="contact()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">contact</div>
-				<div id="fb-root" ng-click="FBLogin()"> Log in</div>
+				<div id="logo" ng-click="home()" ng-class="{'buy-color': !sell_mode, 'sell-color': sell_mode}">jumbooks</div>
+				<div class="sitemap-option" ng-click="about()" ng-class="{'buy-color': !sell_mode, 'sell-color': sell_mode}">about</div>
+				<div class="sitemap-option" ng-click="contact()" ng-class="{'buy-color': !sell_mode, 'sell-color': sell_mode}">contact</div>
+			</div>
+			<div class="col-xs-2 col-xs-offset-4">
+				<div id="fb-root" class="sitemap-option" ng-click="FBLogin()">login</div>
 			</div>
 		</div>
 
