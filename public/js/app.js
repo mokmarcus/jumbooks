@@ -75,6 +75,8 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
     $scope.selected_my_books_mode = function() {
         $scope.sell_mode.my_books_mode = {};
         $scope.sell_mode.new_book_mode = null;
+        console.log("in selected my books");
+        $scope.search_my_books();
     };
 
     $scope.add_book_entry = function() {
@@ -82,8 +84,8 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
         $scope.sell_mode.new_book_mode = null;
 
         //For Testing
-        $scope.input.seller_name = "Marcus Mok";
-        $scope.input.seller_id = "12345";
+        $scope.input.seller_name = $scope.fb_name;
+        $scope.input.seller_id = $scope.fb_id;
 
         var book_info = "book_name=" + $scope.input.book_name
                       + "&book_author=" + $scope.input.book_author
@@ -120,14 +122,18 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
         }
     };
 
-    $scope.resolve_book_entry = function() {
-
-    };
-
     $scope.search_my_books = function() {
+        console.log("in search my books, clicked view");
+        console.log("in search fb id is : " + $scope.fb_id);
+
+        var url = "http://localhost:8000/search?" + "seller_id=" + $scope.fb_id;
+        if ($scope.sell_mode.my_books_mode.search_text) {
+            url += "&book_name=" + $scope.sell_mode.my_books_mode.search_text;
+        }
+        
         $http({
             method: 'GET',
-            url: "http://localhost:8000/search?" + "seller_id=" + $scope.fb_id  + "&book_name=" + $scope.sell_mode.my_books_mode.search_text
+            url: url
         }).then(function success(response) {
             $scope.sell_mode.my_books_mode.books = response.data;
         }, function error(response) {
@@ -179,6 +185,7 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
                     if (response.authResponse) {
                         FB.api('/me', function(response) {
                             $scope.fb_id = response.id;
+                            $scope.fb_name = response.name;
                         });
                         $scope.fb_btn_label = "logout";
                     } else {
