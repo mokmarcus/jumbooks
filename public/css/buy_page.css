@@ -25,6 +25,9 @@
 
 .buy-action-btn {
 	margin-top: 10px;
+	width: 150px;
+    background-color: #f6f6f6;
+    border: 1px solid lightgray;
 }
 
 #buy-search-results {
