@@ -26,6 +26,7 @@ jumbooks_mod.run(['$rootScope', '$window', function($rootScope, $window)  {
 jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function($scope, $window, $http) {
 
     to_default();
+    $scope.fb_btn_label = "login";
 
     /* Buy functions */
 
@@ -126,7 +127,7 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
     $scope.search_my_books = function() {
         $http({
             method: 'GET',
-            url: "http://localhost:8000/search?" + "seller_id=" + "12345" + "&book_name=" + $scope.sell_mode.my_books_mode.search_text
+            url: "http://localhost:8000/search?" + "seller_id=" + $scope.fb_id  + "&book_name=" + $scope.sell_mode.my_books_mode.search_text
         }).then(function success(response) {
             $scope.sell_mode.my_books_mode.books = response.data;
         }, function error(response) {
@@ -171,19 +172,22 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
         }
     }
 
-    $scope.FBLogin = function() {
+    $scope.fb_login = function() {
         FB.getLoginStatus(function(response) {
             if (response.status != 'connected') {
                 FB.login(function(response) {
                     if (response.authResponse) {
-                        console.log("Welcome! Fetching your information....");
                         FB.api('/me', function(response) {
-                            console.log("Good to see you," + response.name + '.');
+                            $scope.fb_id = response.id;
                         });
+                        $scope.fb_btn_label = "logout";
                     } else {
                         console.log("User cancelled login or did not fuly authorized.");
                     }
                 });
+            } else {
+                $scope.fb_btn_label = "login";
+                FB.logout();
             }
         });
     };

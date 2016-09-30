@@ -21,6 +21,7 @@
 </head>
 
 <body ng-controller="jumbooks_ctrl">
+	<div id="fb-root"></div>
 	<div class="container-fluid">
 		<div class="row">
 
@@ -196,11 +197,9 @@
 		<div id="sitemap" class="row">
 			<div class="col-xs-6">
 				<div id="logo" ng-click="home()" ng-class="{'buy-color': !sell_mode, 'sell-color': sell_mode}">jumbooks</div>
-				<div class="sitemap-option" ng-click="about()" ng-class="{'buy-color': !sell_mode, 'sell-color': sell_mode}">about</div>
-				<div class="sitemap-option" ng-click="contact()" ng-class="{'buy-color': !sell_mode, 'sell-color': sell_mode}">contact</div>
-			</div>
-			<div class="col-xs-2 col-xs-offset-4">
-				<div id="fb-root" class="sitemap-option" ng-click="FBLogin()">login</div>
+				<div class="sitemap-option" ng-click="fb_login()" ng-class="{'buy-color': !sell_mode, 'sell-color': sell_mode}">{{fb_btn_label}}</div>
+				<!-- <div class="sitemap-option" ng-click="about()" ng-class="{'buy-color': !sell_mode, 'sell-color': sell_mode}">about</div>
+				<div class="sitemap-option" ng-click="contact()" ng-class="{'buy-color': !sell_mode, 'sell-color': sell_mode}">contact</div> -->
 			</div>
 		</div>
 
