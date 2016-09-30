@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="jumbooks_mod">
 <head>
 	<meta charset="utf-8"/>
 	<title>Jumbooks</title>
@@ -13,7 +13,6 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-touch.js"></script>
 	<script type="text/javascript" src="js/ui-bootstrap-tpls-2.1.4.min.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
-	<script type="text/javascript" src="js/facebook.js"></script>
 	<link rel="stylesheet" href="css/all.css"/>
 	<link rel="stylesheet" href="css/index.css"/>
 	<link rel="stylesheet" href="css/buy_page.css"/>
@@ -21,8 +20,7 @@
 	<link rel="stylesheet" href="css/sitemap.css"/>
 </head>
 
-<body ng-app="jumbooks_mod" ng-controller="jumbooks_ctrl">
-	<div id="fb-root"></div>
+<body ng-controller="jumbooks_ctrl">
 	<div class="container-fluid">
 		<div class="row">
 
@@ -200,6 +198,7 @@
 				<div id="logo" ng-click="home()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">jumbooks</div>
 				<div class="sitemap-option" ng-click="about()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">about</div>
 				<div class="sitemap-option" ng-click="contact()" ng-class="{'buy-color': !sell_clicked, 'sell-color': sell_clicked}">contact</div>
+				<div id="fb-root" ng-click="FBLogin()"> Log in</div>
 			</div>
 		</div>
 

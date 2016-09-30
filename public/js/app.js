@@ -1,8 +1,7 @@
 var jumbooks_mod = angular.module('jumbooks_mod', ['ngAnimate']);
 
-/* This the "main function": it runs before everything else */
-jumbooks_mod.run(['$rootScope', '$window', function($rootScope, $window) {
-    $window.fbAsyncInit = function () {
+jumbooks_mod.run(['$rootScope', '$window', function($rootScope, $window)  {
+    $window.fbAsyncInit = function() {
         FB.init({
             appId: '1368300386515295',
             status: true,
@@ -10,16 +9,9 @@ jumbooks_mod.run(['$rootScope', '$window', function($rootScope, $window) {
             xfbml: true,
             version: 'v2.7'
         });
-        
-        check_login_status();
-
-        // FB.Event.subscribe('auth.statusChange', function(response) {
-        //     console.log(response);
-        //     // $rootScope.$broadcast("fb_statusChange", {'status': response.status});
-        // });
     };
 
-    (function(d, s, id){
+    (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) {
             return;
@@ -28,21 +20,52 @@ jumbooks_mod.run(['$rootScope', '$window', function($rootScope, $window) {
         js.id = id;
         js.src = "//connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-
+    }(document, 'script', 'facebook-jssdk')); 
 }]);
 
-function check_login_status() {
-    FB.getLoginStatus(function(response) {
-        console.log(response);
-        // if (response.status === 'connected') {
-        //     logged_in();
-        // }
-        // else {
-        //     logged_out();
-        // }
-    }, true);   
-}
+/* This the "main function": it runs before everything else */
+// jumbooks_mod.run(['$rootScope', '$window', function($rootScope, $window) {
+//     $window.fbAsyncInit = function () {
+//         FB.init({
+//             appId: '1368300386515295',
+//             status: true,
+//             cookie: true,
+//             xfbml: true,
+//             version: 'v2.7'
+//         });
+        
+//         check_login_status();
+
+//         // FB.Event.subscribe('auth.statusChange', function(response) {
+//         //     console.log(response);
+//         //     // $rootScope.$broadcast("fb_statusChange", {'status': response.status});
+//         // });
+//     };
+
+//     (function(d, s, id){
+//         var js, fjs = d.getElementsByTagName(s)[0];
+//         if (d.getElementById(id)) {
+//             return;
+//         }
+//         js = d.createElement(s);
+//         js.id = id;
+//         js.src = "//connect.facebook.net/en_US/sdk.js";
+//         fjs.parentNode.insertBefore(js, fjs);
+//     }(document, 'script', 'facebook-jssdk'));
+
+// }]);
+
+// function check_login_status() {
+//     FB.getLoginStatus(function(response) {
+//         console.log(response);
+//         // if (response.status === 'connected') {
+//         //     logged_in();
+//         // }
+//         // else {
+//         //     logged_out();
+//         // }
+//     }, true);   
+// }
 
 jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function($scope, $window, $http) {
 
@@ -190,6 +213,23 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
             $scope.books = response.data;
         }, function error(response) {
             console.log("ERROR");
+        });
+    };
+
+    $scope.FBLogin = function() {
+        FB.getLoginStatus(function(response) {
+            if (response.status != 'connected') {
+                FB.login(function(response) {
+                    if (response.authResponse) {
+                        console.log("Welcome! Fetching your information....");
+                        FB.api('/me', function(response) {
+                            console.log("Good to see you," + response.name + '.');
+                        });
+                    } else {
+                        console.log("User cancelled login or did not fuly authorized.");
+                    }
+                });
+            }
         });
     };
 }]);
