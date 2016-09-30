@@ -149,7 +149,7 @@
 
 				<!-- Book Results Template -->
 				<div id="sell-search-results">
-					<div class="sell-search-result" ng-repeat="book in sell_mode.my_books_mode.books">
+					<div class="sell-search-result" ng-repeat="book in sell_mode.my_books_mode.books" ng-hide="book.hidden">
 						<div class="sell-result-default row" ng-click="sell_toggle_expansion($index)">
 							<div class="col-xs-7">{{book.book_name}}</div>
 							<div class="col-xs-3">{{book.book_author}}</div>
@@ -184,7 +184,7 @@
 								<div class="col-xs-2">Condition:</div>
 								<div class="col-xs-10">{{book.book_condition}}</div>
 							</div>
-							<button class="col-xs-4 col-xs-offset-4 sell-action-btn" ng-click="resolve_book_entry()">Resolve</button>
+							<button class="col-xs-4 col-xs-offset-4 sell-action-btn" ng-click="resolve_book_entry(book)">Resolve</button>
 						</div>
 					</div>
 				</div>

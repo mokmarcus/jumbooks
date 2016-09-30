@@ -69,8 +69,8 @@ app.get('/search', function(request, response) {
 });
 
 app.delete('/delete', function(request, response) {
-    db.collection('books').remove({"_id": new mongodb.ObjectId(request.body._id)}, function(error, results) {
-        response.send("Deleted the book id: " + request.body._id);
+    db.collection('books').remove({"_id": new mongodb.ObjectId(request.query.book_id)}, function(error, results) {
+        response.send("Deleted the book id: " + request.query.book_id);
     });
 });
 

@@ -191,4 +191,17 @@ jumbooks_mod.controller('jumbooks_ctrl', ['$scope', '$window', '$http', function
             }
         });
     };
+
+    $scope.resolve_book_entry = function(book) {
+        $http({
+            method: 'DELETE',
+            url: "http://localhost:8000/delete?book_id=" + book._id
+        }).then(function success(response) {
+            console.log(response);
+        }, function error(response) {
+            console.log("ERROR");
+        });
+
+        book.hidden = true;
+    };
 }]);
